@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  html,body{margin:0;padding:0;background:#070512;overflow:hidden;height:100%;font-family:ui-monospace,'DejaVu Sans Mono',monospace}
+  .wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .term{width:1500px;height:820px;background:#0d0a1f;border:2px solid #2b2350;border-radius:18px;padding:44px 52px;box-sizing:border-box;box-shadow:0 0 80px rgba(196,28,131,.35)}
+  .dots{display:flex;gap:12px;margin-bottom:30px}
+  .dots span{width:22px;height:22px;border-radius:50%}
+  .r{background:#ff5f57}.y{background:#febc2e}.g{background:#28c840}
+  #lines{font-size:33px;line-height:1.85;color:#d8d3f5;white-space:pre-wrap}
+  .cmd{color:#00e5ff}
+  .ok{color:#28c840}
+  .dim{color:#8a84b8}
+  .hl{color:#ffd60a}
+  .cursor{display:inline-block;width:20px;height:38px;background:#ffd60a;vertical-align:-6px;animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="term">
+  <div class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+  <div id="lines"></div><span class="cursor"></span>
+</div></div>
+<script>
+// The agent working, line by line — typed live over ~10 seconds.
+const LINES = [
+  { t: '<span class="cmd">$ muse</span> <span class="dim">"Build a tiny browser game: a neon basket catches falling stars…"</span>', at: 0.3 },
+  { t: '<span class="ok">✓</span> prompt received — <span class="hl">1 prompt</span>, 0 edits, 0 hand-holding', at: 1.6 },
+  { t: '<span class="dim">▸</span> writing <span class="hl">game/index.html</span> — canvas, basket, star physics … <span class="ok">done</span>', at: 3.0 },
+  { t: '<span class="dim">▸</span> adding bombs, lives, 60-second timer, game-over screen … <span class="ok">done</span>', at: 4.6 },
+  { t: '<span class="dim">▸</span> neon styling, twinkling sky, autoplay demo bot … <span class="ok">done</span>', at: 6.2 },
+  { t: '<span class="dim">▸</span> running it in the browser … <span class="ok">it plays</span>', at: 7.8 },
+  { t: '<span class="ok">✓ GAME READY</span> — one prompt in, one game out. <span class="hl">Watch it play ↓</span>', at: 9.0 },
+];
+const box = document.getElementById('lines');
+const t0 = performance.now();
+let shown = 0;
+function tick() {
+  const t = (performance.now() - t0) / 1000;
+  while (shown < LINES.length && t >= LINES[shown].at) {
+    const d = document.createElement('div');
+    d.innerHTML = LINES[shown].t;
+    box.appendChild(d);
+    shown++;
+  }
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>

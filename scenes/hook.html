@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  html,body{margin:0;padding:0;background:#070512;overflow:hidden;height:100%;font-family:system-ui,sans-serif}
+  #sky{position:fixed;inset:0}
+  .star{position:absolute;background:#fff;border-radius:50%;animation:tw 1.8s ease-in-out infinite}
+  @keyframes tw{0%,100%{opacity:.2}50%{opacity:1}}
+  .wrap{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px}
+  h1{margin:0;color:#fff;font-size:120px;font-weight:900;letter-spacing:-2px;line-height:1.02;text-align:center;text-shadow:0 0 44px #c41c83}
+  h1 .pink{color:#ff5db1}
+  h1 .cyan{color:#00e5ff;text-shadow:0 0 44px #00e5ff}
+  #prompt{max-width:1240px;background:#14102a;border:2px solid #2b2350;border-radius:22px;padding:26px 34px;color:#e8e4ff;font-size:34px;line-height:1.45;opacity:0;transform:translateY(14px);transition:opacity .5s,transform .5s}
+  #prompt.show{opacity:1;transform:translateY(0)}
+  #prompt b{color:#ffd60a}
+  #prompt .who{color:#00e5ff;font-weight:700}
+  .fade{opacity:0;transition:opacity .6s}
+  .fade.show{opacity:1}
+</style>
+</head>
+<body>
+<div id="sky"></div>
+<div class="wrap">
+  <h1><span id="l1" class="fade">ONE PROMPT.</span><br><span id="l2" class="fade"><span class="pink">ONE</span> <span class="cyan">GAME.</span></span></h1>
+  <div id="prompt"><span class="who">you &gt;</span> “Build a tiny browser game: a <b>neon basket</b> catches <b>falling stars</b>. Move with mouse or arrow keys, catch stars for points, avoid falling <b>bombs</b>, <b>60-second</b> timer, score on a game-over screen.”</div>
+</div>
+<script>
+// Twinkling sky.
+const sky = document.getElementById('sky');
+for (let i = 0; i < 130; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const r = 1 + Math.random() * 2.4;
+  s.style.width = s.style.height = r + 'px';
+  s.style.left = (Math.random() * 100) + '%';
+  s.style.top = (Math.random() * 100) + '%';
+  s.style.animationDelay = (Math.random() * 1.8) + 's';
+  sky.appendChild(s);
+}
+// Timed reveal, driven by wall clock from load.
+const t0 = performance.now();
+function tick() {
+  const t = (performance.now() - t0) / 1000;
+  if (t > 0.4) document.getElementById('l1').classList.add('show');
+  if (t > 1.4) document.getElementById('l2').classList.add('show');
+  if (t > 2.4) document.getElementById('prompt').classList.add('show');
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>
